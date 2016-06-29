@@ -17,6 +17,8 @@
     ]
   },
   "dependencies": {
+    "moment": "^2.13.0",
+    "numeral": "^1.5.3",
     "vue": "^1.0.0"
   },
   "devDependencies": {
