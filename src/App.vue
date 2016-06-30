@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h4 style="text-align: center;">Timer Management System</h4>
-    <h1>{{audio.canPlayType()}}
+    <h1>{{audio.canPlayType('audio/ogg')}}
     <hr>
     <div v-sortable:cards="{animation: 150, handle: '.handle'}" style="margin: 0px auto;">
       <card v-for="(index, card) in cards" :card="card"></card>
