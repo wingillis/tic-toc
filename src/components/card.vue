@@ -6,8 +6,9 @@
 }
 
 .card {
-  margin: 10px;
+  margin: 10px auto;
   min-height: 100px;
+  min-width: 340px;
 }
 
 .mdl-card__supporting-text > h4 {
@@ -17,11 +18,15 @@
 #reset-button {
   padding-bottom: 2px;
 }
+
+.handle {
+  cursor: ns-resize;
+}
 </style>
 
 <template lang="jade">
 .card.mdl-card.mdl-shadow--2dp(v-mdl)
-  .mdl-card__title
+  .mdl-card__title.handle
     h3.mdl-card__title-text {{card.title}}
   .mdl-card__menu
     button.mdl-button.mdl-js-button.mdl-button--icon(v-mdl, @click="notifyDelete")
@@ -44,8 +49,29 @@
 <script>
 import numeral from 'numeral'
 
+function humanizeTime(t_ms) {
+  var t = t_ms / 1000
+  var seconds = t % 60
+  var minutes = Math.floor((t/60)) % 60
+  var hours = Math.floor((t/3600)) % 60
+  var time_str = 'for '
+  if (hours > 0) {
+    time_str = time_str + hours.toString() + ' hours '
+  }
+  if (minutes > 0) {
+    time_str = time_str + minutes.toString() + ' minutes '
+  }
+  if (time_str !== 'for ') {
+    time_str = time_str + 'and '
+  }
+  if (seconds > 0) {
+    time_str = time_str + seconds.toString() + ' seconds'
+  }
+  return time_str
+}
+
 export default {
-  props: ['card', 'index'],
+  props: ['card'],
   data () {
 
     // assume data is always in hh:mm:ss: 00:15:00 for 15 minutes
@@ -66,11 +92,11 @@ export default {
   },
   methods: {
     notifyDelete() {
-      this.$dispatch('delete', this.index)
+      this.$dispatch('delete', this.card)
     },
     start () {
       this.card.current = true
-      this.$dispatch('start', this.index)
+      this.$dispatch('start', this.card.position)
       this.createTimer()
       // start a 1s timer and store the timer id
     },
@@ -80,7 +106,7 @@ export default {
         this.timeLeft = this.timeLeft - 1000
         if (this.timeLeft < 0) {
           this.cancel()
-          this.$dispatch('nextTimer', this.index + 1)
+          this.$dispatch('nextTimer', this.card.position + 1)
           // stop timer, reset time,
           // call next timer
         }
@@ -114,6 +140,11 @@ export default {
     },
     resetTime () {
       this.timeLeft = this.originalTime
+    },
+    speakStart () {
+      timeStr = humanizeTime(this.timeLeft)
+      var msg = new SpeechSynthesisUtterance(this.card.title + ' is beginning ' + timeStr)
+      window.speechSynthesis.speak(msg)
     }
   },
   computed: {
@@ -129,7 +160,9 @@ export default {
     },
     'nextTimerChild': function () {
       if (this.card.current) {
+        this.speakStart()
         this.createTimer()
+        this.$el.scrollIntoView(false)
       }
     }
   }

@@ -1,7 +1,8 @@
 <style>
 #timer-input {
-  margin: 10px;
+  margin: 10px auto;
   min-height: 100px;
+  min-width: 340px;
 }
 
 #timer-input > .mdl-textfield  {
@@ -39,7 +40,8 @@ export default {
       var card = {
         title: this.title,
         time: this.time,
-        current: false
+        current: false,
+        position: 0
       }
       this.$dispatch('add', card)
 

@@ -2,7 +2,9 @@
   <div id="app">
     <h4 style="text-align: center;">Timer Management System</h4>
     <hr>
-    <card v-for="(index, card) in cards" :card="card" :index="index"></card>
+    <div v-sortable:cards="{animation: 250, handle: '.handle'}" style="margin: 0px auto;">
+      <card v-for="(index, card) in cards" :card="card"></card>
+    </div>
     <new-card></new-card>
   </div>
 </template>
@@ -15,13 +17,21 @@ import numeral from 'numeral'
 var cards = [
   {
     title: 'Task 1',
-    time: '00:15:00',
-    current: false
+    time: '00:00:10',
+    current: false,
+    position: 0
   },
   {
     title: 'Task 2',
-    time: '00:05:00',
-    current: false
+    time: '00:00:05',
+    current: false,
+    position: 1
+  },
+  {
+    title: 'Task 3',
+    time: '00:00:07',
+    current: false,
+    position: 2
   }
 ]
 
@@ -34,17 +44,22 @@ export default {
     return {cards: cards}
   },
   events: {
-    'delete': function(index) {
+    'delete': function(card) {
       // remove at index, and only remove 1 entry
-      this.cards.splice(index, 1);
+      this.cards.$remove(card)
+      this.cards = this.cards.map((card, index) => {
+        card.position = index
+        return card
+      })
     },
     'add': function(card) {
+      card.position = this.cards.length
       this.cards.push(card);
     },
     'start': function(index) {
-      this.cards = this.cards.map((card, idx) => {
+      this.cards = this.cards.map((card) => {
         card.current = false
-        if (idx == index) {
+        if (card.position == index) {
           card.current = true
         }
         return card
@@ -55,6 +70,9 @@ export default {
       if (index < this.cards.length) {
         this.$emit('start', index)
         this.$broadcast('nextTimerChild')
+      } else {
+        console.log('Timers over')
+        // say that the timer is over
       }
     }
   }
