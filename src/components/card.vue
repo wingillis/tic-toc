@@ -61,10 +61,10 @@ function humanizeTime(t_ms) {
   if (minutes > 0) {
     time_str = time_str + minutes.toString() + ' minutes '
   }
-  if (time_str !== 'for ') {
-    time_str = time_str + 'and '
-  }
   if (seconds > 0) {
+    if (time_str !== 'for ' ) {
+      time_str = time_str + 'and '
+    }
     time_str = time_str + seconds.toString() + ' seconds'
   }
   return time_str
