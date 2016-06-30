@@ -35,7 +35,8 @@ export default {
   },
   events: {
     'delete': function(index) {
-      this.cards.splice(index);
+      // remove at index, and only remove 1 entry
+      this.cards.splice(index, 1);
     },
     'add': function(card) {
       this.cards.push(card);
@@ -49,6 +50,12 @@ export default {
         return card
       })
       this.$broadcast('reset')
+    },
+    'nextTimer': function (index) {
+      if (index < this.cards.length) {
+        this.$emit('start', index)
+        this.$broadcast('nextTimerChild')
+      }
     }
   }
 }

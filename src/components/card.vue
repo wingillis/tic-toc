@@ -44,10 +44,6 @@
 <script>
 import numeral from 'numeral'
 
-function msToString(time) {
-
-}
-
 export default {
   props: ['card', 'index'],
   data () {
@@ -73,19 +69,22 @@ export default {
       this.$dispatch('delete', this.index)
     },
     start () {
-      var ctx = this
       this.card.current = true
       this.$dispatch('start', this.index)
+      this.createTimer()
+      // start a 1s timer and store the timer id
+    },
+    createTimer () {
       this.timerRunning = true
       this.timerID = setInterval(()=>{
         this.timeLeft = this.timeLeft - 1000
         if (this.timeLeft < 0) {
           this.cancel()
+          this.$dispatch('nextTimer', this.index + 1)
           // stop timer, reset time,
           // call next timer
         }
       }, 1000)
-      // start a 1s timer and store the timer id
     },
     stop () {
       // stop the timer function
@@ -126,6 +125,11 @@ export default {
     'reset': function () {
       if (!this.card.current) {
         this.stop()
+      }
+    },
+    'nextTimerChild': function () {
+      if (this.card.current) {
+        this.createTimer()
       }
     }
   }
