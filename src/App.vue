@@ -45,6 +45,7 @@ export default {
   data () {
     return {
       cards: cards,
+      paused: null,
       audio: document.getElementById('alarmAudio')
     }
   },
@@ -85,12 +86,15 @@ export default {
       }
     },
     'soundAlarm': function (func) {
-      this.audio.play()
-      setTimeout(() => {
-        this.audio.pause()
-        this.audio.currentTime = 0
-        func()
-      }, 1200)
+
+      this.audio.play().then(() => {
+        this.paused = this.audio.paused
+        setTimeout(() => {
+          this.audio.pause()
+          this.audio.currentTime = 0
+          func()
+        }, 1200)
+      })
     }
   }
 }
