@@ -14,26 +14,28 @@ import Card from './components/card.vue'
 import NewCard from './components/new-card.vue'
 import numeral from 'numeral'
 
-var cards = [
-  {
-    title: 'Task 1',
-    time: '00:00:10',
-    current: false,
-    position: 0
-  },
-  {
-    title: 'Task 2',
-    time: '00:00:05',
-    current: false,
-    position: 1
-  },
-  {
-    title: 'Task 3',
-    time: '00:00:07',
-    current: false,
-    position: 2
-  }
-]
+// for dev
+// var cards = [
+//   {
+//     title: 'Task 1',
+//     time: '00:00:10',
+//     current: false,
+//     position: 0
+//   },
+//   {
+//     title: 'Task 2',
+//     time: '00:00:05',
+//     current: false,
+//     position: 1
+//   },
+//   {
+//     title: 'Task 3',
+//     time: '00:00:07',
+//     current: false,
+//     position: 2
+//   }
+// ]
+var cards = []
 
 export default {
   components: {
