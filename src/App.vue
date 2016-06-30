@@ -2,7 +2,7 @@
   <div id="app">
     <h4 style="text-align: center;">Timer Management System</h4>
     <hr>
-    <div v-sortable:cards="{animation: 250, handle: '.handle'}" style="margin: 0px auto;">
+    <div v-sortable:cards="{animation: 150, handle: '.handle'}" style="margin: 0px auto;">
       <card v-for="(index, card) in cards" :card="card"></card>
     </div>
     <new-card></new-card>
@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       cards: cards,
-      audio: new Audio('dist/alarm.opus')
+      audio: new Audio('/dist/alarm.opus')
     }
   },
   events: {
@@ -58,7 +58,12 @@ export default {
       })
     },
     'add': function(card) {
-      card.position = this.cards.length
+      if (this.cards === []) {
+        card.position = 0
+      } else {
+        card.position = this.cards.length
+      }
+
       this.cards.push(card);
     },
     'start': function(index) {
@@ -76,8 +81,7 @@ export default {
         this.$emit('start', index)
         this.$broadcast('nextTimerChild')
       } else {
-        console.log('Timers over')
-        // say that the timer is over
+        // nothing to do
       }
     },
     'soundAlarm': function (func) {
