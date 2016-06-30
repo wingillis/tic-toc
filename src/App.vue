@@ -48,7 +48,7 @@ export default {
         }
         return card
       })
-
+      this.$broadcast('reset')
     }
   }
 }
