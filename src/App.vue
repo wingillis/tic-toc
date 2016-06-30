@@ -46,7 +46,7 @@ export default {
   data () {
     return {
       cards: cards,
-      audio: new Audio('/dist/alarm.opus')
+      audio: new Audio('/dist/alarm.ogg')
     }
   },
   events: {
