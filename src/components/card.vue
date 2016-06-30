@@ -106,7 +106,9 @@ export default {
         this.timeLeft = this.timeLeft - 1000
         if (this.timeLeft < 0) {
           this.cancel()
-          this.$dispatch('nextTimer', this.card.position + 1)
+          this.$dispatch('soundAlarm', ()=> {
+            this.$dispatch('nextTimer', this.card.position + 1)
+          })
           // stop timer, reset time,
           // call next timer
         }

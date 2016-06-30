@@ -41,7 +41,10 @@ export default {
     NewCard
   },
   data () {
-    return {cards: cards}
+    return {
+      cards: cards,
+      audio: new Audio('dist/alarm.opus')
+    }
   },
   events: {
     'delete': function(card) {
@@ -74,6 +77,14 @@ export default {
         console.log('Timers over')
         // say that the timer is over
       }
+    },
+    'soundAlarm': function (func) {
+      this.audio.play()
+      setTimeout(() => {
+        this.audio.pause()
+        this.audio.currentTime = 0
+        func()
+      }, 1200)
     }
   }
 }
