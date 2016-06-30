@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       cards: cards,
-      audio: new Audio('/dist/alarm.opus')
+      audio: document.getElementById('alarmAudio')
     }
   },
   events: {
