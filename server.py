@@ -12,4 +12,5 @@ def send_js(path):
     return send_from_directory('dist', path)
 
 if __name__ == '__main__':
-    app.run(port=8081)
+    # app.run(port=8081) # development
+    app.run(port=80, host='0.0.0.0') # production

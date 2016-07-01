@@ -27,6 +27,22 @@
 </template>
 
 <script>
+
+function str2ms(arr) {
+  function parse(ind) {
+    var t = arr[ind]
+    if (t != null) {
+      return parseInt(t.substring(0, t.length-1))
+    } else {
+      return 0
+    }
+  }
+  var hours = parse(1)
+  var minutes = parse(2)
+  var seconds = parse(3)
+  return (((hours * 60) + minutes) * 60 + seconds) * 1000 // ms
+}
+
 export default {
   data () {
     var data = {
@@ -37,9 +53,11 @@ export default {
   },
   methods: {
     addCard() {
+      var re = /([0-9]+h)?\s*([0-9]+m)?\s*([0-9]+s)?$/
+      var arr = re.exec(this.time)
       var card = {
         title: this.title,
-        time: this.time,
+        time: str2ms(arr),
         current: false,
         position: 0
       }

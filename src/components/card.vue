@@ -75,7 +75,7 @@ export default {
   data () {
 
     // assume data is always in hh:mm:ss: 00:15:00 for 15 minutes
-    var t = numeral().unformat(this.card.time) * 1000
+    var t = this.card.time
     // timeLeft is in milliseconds
     var data = {
       timeLeft: t,
