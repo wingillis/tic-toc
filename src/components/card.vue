@@ -19,9 +19,9 @@
   padding-bottom: 2px;
 }
 
-.handle {
+/*.handle {
   cursor: ns-resize;
-}
+}*/
 </style>
 
 <template lang="jade">
@@ -71,7 +71,7 @@ function humanizeTime(t_ms) {
 }
 
 export default {
-  props: ['card'],
+  props: ['card', 'index'],
   data () {
 
     // assume data is always in hh:mm:ss: 00:15:00 for 15 minutes
@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     notifyDelete() {
-      this.$dispatch('delete', this.card)
+      this.$dispatch('delete', this.index)
     },
     start () {
       this.card.current = true

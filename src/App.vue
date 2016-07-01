@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <h4 style="text-align: center;">Timer Management System</h4>
+    <h3 style="text-align: center; margin-top: 8px; margin-bottom: 8px">Tic - Toc</h3>
     <hr>
-    <div v-sortable:cards="{animation: 150, handle: '.handle'}" style="margin: 0px auto;">
-      <card v-for="(index, card) in cards" :card="card"></card>
+    <div style="margin: 0px auto;">
+      <card v-for="(index, card) in cards" :card="card" :index="index" ></card>
     </div>
     <new-card></new-card>
   </div>
@@ -18,19 +18,19 @@ import numeral from 'numeral'
 // var cards = [
 //   {
 //     title: 'Task 1',
-//     time: '00:00:10',
+//     time: 3000,
 //     current: false,
 //     position: 0
 //   },
 //   {
 //     title: 'Task 2',
-//     time: '00:00:05',
+//     time: 4000,
 //     current: false,
 //     position: 1
 //   },
 //   {
 //     title: 'Task 3',
-//     time: '00:00:07',
+//     time: 5000,
 //     current: false,
 //     position: 2
 //   }
@@ -50,13 +50,9 @@ export default {
     }
   },
   events: {
-    'delete': function(card) {
+    'delete': function(index) {
       // remove at index, and only remove 1 entry
-      this.cards.$remove(card)
-      this.cards = this.cards.map((card, index) => {
-        card.position = index
-        return card
-      })
+      this.cards.splice(index,1)
     },
     'add': function(card) {
       if (this.cards === []) {
