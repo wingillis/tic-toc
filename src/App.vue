@@ -14,6 +14,7 @@ import Card from './components/card.vue'
 import NewCard from './components/new-card.vue'
 import numeral from 'numeral'
 
+var notify = require('notifyjs')['default']
 // for dev
 // var cards = [
 //   {
@@ -49,6 +50,11 @@ export default {
       audio: document.getElementById('alarmAudio')
     }
   },
+  ready () {
+    if (notify.isSupported()) {
+      notify.requestPermission()
+    }
+  },
   events: {
     'delete': function(index) {
       // remove at index, and only remove 1 entry
@@ -64,9 +70,9 @@ export default {
       this.cards.push(card);
     },
     'start': function(index) {
-      this.cards = this.cards.map((card) => {
+      this.cards = this.cards.map((card, idx) => {
         card.current = false
-        if (card.position == index) {
+        if (idx === index) {
           card.current = true
         }
         return card
@@ -81,8 +87,17 @@ export default {
         // nothing to do
       }
     },
-    'soundAlarm': function (func) {
-
+    'soundAlarm': function (func, cardIndex) {
+      var card = this.cards[cardIndex]
+      var nextTimer = "get ready for next timer: "
+      if (this.cards.length < (cardIndex+1)) {
+        nextTimer = nextTimer + this.cards[cardIndex+1]
+      } else {
+        nextTimer = "No additional timers"
+      }
+      new notify(card.title, {
+        body: nextTimer
+      }).show()
       this.audio.play().then(() => {
         this.paused = this.audio.paused
         setTimeout(() => {

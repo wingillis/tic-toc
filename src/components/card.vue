@@ -96,7 +96,7 @@ export default {
     },
     start () {
       this.card.current = true
-      this.$dispatch('start', this.card.position)
+      this.$dispatch('start', this.index)
       this.createTimer()
       // start a 1s timer and store the timer id
     },
@@ -107,8 +107,8 @@ export default {
         if (this.timeLeft < 0) {
           this.cancel()
           this.$dispatch('soundAlarm', ()=> {
-            this.$dispatch('nextTimer', this.card.position + 1)
-          })
+            this.$dispatch('nextTimer', this.index + 1)
+          }, this.index)
           // stop timer, reset time,
           // call next timer
         }
