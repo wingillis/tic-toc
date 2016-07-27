@@ -91,7 +91,7 @@ export default {
       var card = this.cards[cardIndex]
       var nextTimer = "get ready for next timer: "
       if (this.cards.length > (cardIndex+1)) {
-        nextTimer = nextTimer + this.cards[cardIndex+1]
+        nextTimer = nextTimer + this.cards[cardIndex+1].title
       } else {
         nextTimer = "No additional timers"
       }
