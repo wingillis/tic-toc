@@ -90,7 +90,7 @@ export default {
     'soundAlarm': function (func, cardIndex) {
       var card = this.cards[cardIndex]
       var nextTimer = "get ready for next timer: "
-      if (this.cards.length < (cardIndex+1)) {
+      if (this.cards.length > (cardIndex+1)) {
         nextTimer = nextTimer + this.cards[cardIndex+1]
       } else {
         nextTimer = "No additional timers"
