@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "moment": "^2.13.0",
+    "notifyjs": "^2.0.3",
     "numeral": "^1.5.3",
     "vue": "^1.0.0"
   },
