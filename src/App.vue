@@ -3,6 +3,9 @@
     <h3 style="text-align: center; margin-top: 8px; margin-bottom: 8px">Tic - Toc</h3>
     <hr>
     <div style="margin: 0px auto;">
+      <div class="clear-button">
+        <button class="clear-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" @click="clearAll">Clear all</button>
+      </div>
       <card v-for="(index, card) in cards" :card="card" :index="index" ></card>
     </div>
     <new-card></new-card>
@@ -15,6 +18,8 @@ import NewCard from './components/new-card.vue'
 import numeral from 'numeral'
 
 var notify = require('notifyjs')['default']
+
+var storage = window.sessionStorage
 // for dev
 // var cards = [
 //   {
@@ -37,6 +42,9 @@ var notify = require('notifyjs')['default']
 //   }
 // ]
 var cards = []
+if (storage.cards != null) {
+  cards = JSON.parse(storage.cards)
+}
 
 export default {
   components: {
@@ -55,10 +63,17 @@ export default {
       notify.requestPermission()
     }
   },
+  methods: {
+    clearAll () {
+      this.cards = []
+      storage.cards = JSON.stringify(this.cards)
+    }
+  },
   events: {
     'delete': function(index) {
       // remove at index, and only remove 1 entry
       this.cards.splice(index,1)
+      storage.cards = JSON.stringify(this.cards)
     },
     'add': function(card) {
       if (this.cards === []) {
@@ -68,12 +83,15 @@ export default {
       }
 
       this.cards.push(card);
+
+      storage.cards = JSON.stringify(this.cards)
     },
     'start': function(index) {
       this.cards = this.cards.map((card, idx) => {
         card.current = false
         if (idx === index) {
           card.current = true
+          window.title = card.title
         }
         return card
       })
@@ -112,5 +130,8 @@ export default {
 </script>
 
 <style>
-
+.clear-button {
+  margin: 0px auto;
+  display: flex;
+}
 </style>
