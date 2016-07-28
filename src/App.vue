@@ -91,7 +91,7 @@ export default {
         card.current = false
         if (idx === index) {
           card.current = true
-          window.title = card.title
+          document.title = card.title
         }
         return card
       })
