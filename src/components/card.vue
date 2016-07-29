@@ -70,7 +70,7 @@ h3.mdl-card__title-text {
 .hider(@mouseenter="showDiv", @mouseleave="hideDiv", :style="hiderStyle" v-if="index !== 0")
   .plus-button(:style="addButtonStyle", v-if="showAdd", transition="fade", @click="addTimer").mdl-js-button.mdl-js-ripple-effect.mdl-button--raised
     i.material-icons.plus-icon add_circle
-.card.mdl-card.mdl-shadow--2dp(v-mdl)
+.card.mdl-card.mdl-shadow--2dp(v-mdl, v-el:this-card)
   .mdl-card__title.handle
     h3.mdl-card__title-text {{card.title}}
   .mdl-card__menu
@@ -135,7 +135,6 @@ export default {
       originalTime: t,
       timerRunning: false,
       timerID: null,
-      windowWidth: window.innerWidth,
       showAdd: false,
       hiderStyle: hiderStyle
     }
@@ -143,10 +142,19 @@ export default {
   },
   ready () {
     if (this.card.current) {
-      this.$el.scrollIntoView(false)
+      this.$els.thisCard.scrollIntoView()
     }
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    handleResize (e) {
+      this.hiderStyle = {
+        left: Math.floor(window.innerWidth/2 - 177) + "px"
+      }
+    },
     showDiv() {
       this.showAdd = true
     },
@@ -222,6 +230,11 @@ export default {
     }
   },
   events: {
+    'into-position': function (index) {
+      if (this.index === index) {
+        this.$els.thisCard.scrollIntoView()
+      }
+    },
     'reset': function () {
       if (!this.card.current) {
         this.stop()
@@ -231,7 +244,7 @@ export default {
       if (this.card.current) {
         this.speakStart()
         this.createTimer()
-        this.$el.scrollIntoView(false)
+        this.$els.thisCard.scrollIntoView()
       }
     }
   }

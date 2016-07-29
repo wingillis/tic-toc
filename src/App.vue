@@ -97,6 +97,7 @@ export default {
         card.position = index
         this.cards.$set(index, card)
       })
+      this.$broadcast('into-position', index)
       storage.cards = JSON.stringify(this.cards)
     },
     'start': function(index) {
@@ -135,7 +136,7 @@ export default {
           this.audio.pause()
           this.audio.currentTime = 0
           func()
-        }, 1200)
+        }, 900)
       })
     }
   }
