@@ -26,7 +26,6 @@
   position: relative;
 }
 
-
 .plus-button {
   display: flex;
   position: absolute;
@@ -64,6 +63,11 @@ h3.mdl-card__title-text {
   top: 5px;
   left: 170px;
 }
+
+#edit-title {
+  outline: none;
+  margin-right: 40px;
+}
 </style>
 
 <template lang="jade">
@@ -72,7 +76,8 @@ h3.mdl-card__title-text {
     i.material-icons.plus-icon add_circle
 .card.mdl-card.mdl-shadow--2dp(v-mdl, v-el:this-card)
   .mdl-card__title.handle
-    h3.mdl-card__title-text {{card.title}}
+    input#edit-title.mdl-textfield__input(type="text", v-mdl, v-model="card.title", v-el:titput, v-if="editing", @keyup.enter="stopEdit")
+    h3.mdl-card__title-text(v-else, @dblclick="edit") {{card.title}}
   .mdl-card__menu
     button.mdl-button.mdl-js-button.mdl-button--icon(v-mdl, @click="notifyDelete")
       i.material-icons delete
@@ -136,7 +141,8 @@ export default {
       timerRunning: false,
       timerID: null,
       showAdd: false,
-      hiderStyle: hiderStyle
+      hiderStyle: hiderStyle,
+      editing: false
     }
     return data
   },
@@ -150,6 +156,18 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    stopEdit () {
+      this.editing = false
+      this.$dispatch('save-changes')
+    },
+    edit () {
+      if(!this.timerRunning) {
+        this.editing = true
+        setTimeout(() => {
+          this.$els.titput.focus()
+        }, 200)
+      }
+    },
     handleResize (e) {
       this.hiderStyle = {
         left: Math.floor(window.innerWidth/2 - 177) + "px"

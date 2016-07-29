@@ -111,6 +111,9 @@ export default {
       })
       this.$broadcast('reset')
     },
+    'save-changes': function () {
+      storage.cards = JSON.stringify(this.cards)
+    },
     'nextTimer': function (index) {
       if (index < this.cards.length) {
         this.$emit('start', index)
