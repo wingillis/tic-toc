@@ -6,7 +6,7 @@
 }
 
 .card {
-  margin: 10px auto;
+  margin: 0px auto;
   min-height: 100px;
   min-width: 340px;
 }
@@ -19,12 +19,43 @@
   padding-bottom: 2px;
 }
 
+.hider {
+  width: 340px;
+  z-index: 5;
+  height: 15px;
+  position: relative;
+}
+
+
+.plus-button {
+  position: absolute;
+  top: -20px;
+  background-color: rgba(226, 159, 183, 0.6);
+  height: 50px;
+  width: 50px;
+  left: 145px;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: center;
+}
+
+.plus-icon {
+  width: 25px;
+}
+
+h3.mdl-card__title-text {
+  padding-right: 30px;
+}
+
 /*.handle {
   cursor: ns-resize;
 }*/
 </style>
 
 <template lang="jade">
+.hider(@mouseenter="showDiv", @mouseleave="hideDiv", :style="hiderStyle")
+  .plus-button(:style="addButtonStyle")
+    i.material-icons.plus-icon add circle
 .card.mdl-card.mdl-shadow--2dp(v-mdl)
   .mdl-card__title.handle
     h3.mdl-card__title-text {{card.title}}
@@ -76,12 +107,23 @@ export default {
 
     // assume data is always in hh:mm:ss: 00:15:00 for 15 minutes
     var t = this.card.time
+    var addButtonStyle = {
+      display: "none"
+    }
+
+    var hiderStyle = {
+      left: Math.floor(window.innerWidth/2 - 177) + "px"
+    }
+
     // timeLeft is in milliseconds
     var data = {
       timeLeft: t,
       originalTime: t,
       timerRunning: false,
-      timerID: null
+      timerID: null,
+      windowWidth: window.innerWidth,
+      addButtonStyle: addButtonStyle,
+      hiderStyle: hiderStyle
     }
     return data
   },
@@ -91,6 +133,12 @@ export default {
     }
   },
   methods: {
+    showDiv() {
+      this.addButtonStyle.display = "flex"
+    },
+    hideDiv() {
+      this.addButtonStyle.display = "none"
+    },
     notifyDelete() {
       this.$dispatch('delete', this.index)
     },

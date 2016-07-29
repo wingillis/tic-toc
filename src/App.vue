@@ -2,10 +2,11 @@
   <div id="app">
     <h3 style="text-align: center; margin-top: 8px; margin-bottom: 8px">Tic - Toc</h3>
     <hr>
-    <div style="margin: 0px auto;">
+    <div id="card-holder" style="margin: 0px auto;">
       <div class="clear-button">
         <button class="clear-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" @click="clearAll">Clear all</button>
       </div>
+      <!-- Render all the timers created so far -->
       <card v-for="(index, card) in cards" :card="card" :index="index" ></card>
     </div>
     <new-card></new-card>
@@ -15,8 +16,9 @@
 <script>
 import Card from './components/card.vue'
 import NewCard from './components/new-card.vue'
+// provides good time formatting support
 import numeral from 'numeral'
-
+// used to make desktop notifications at timer end
 var notify = require('notifyjs')['default']
 
 var storage = window.sessionStorage
@@ -133,5 +135,9 @@ export default {
 .clear-button {
   margin: 0px auto;
   display: flex;
+}
+
+#card-holder {
+  position: relative;
 }
 </style>
