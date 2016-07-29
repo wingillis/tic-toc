@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <h3 style="text-align: center; margin-top: 8px; margin-bottom: 8px">Tic - Toc</h3>
+    <h3 id="titlebar" style="text-align: center; margin-top: 8px; margin-bottom: 8px">Tic - Toc</h3>
     <hr>
     <div id="card-holder" style="margin: 0px auto;">
       <div class="clear-button">
-        <button class="clear-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" @click="clearAll">Clear all</button>
+        <button id="clbtn" class="clear-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" @click="clearAll">Clear all</button>
       </div>
       <!-- Render all the timers created so far -->
       <card v-for="(index, card) in cards" :card="card" :index="index" ></card>
@@ -150,7 +150,23 @@ export default {
   padding-bottom: 15px;
 }
 
+#clbtn.clear-button {
+  background-color: white;
+}
+
+#clbtn.mdl-button:hover {
+  background-color: rgba(255,255,255, 0.7);
+}
+
 #card-holder {
   position: relative;
+}
+
+#titlebar, #titlebar:focus {
+  color: #E3B9FF;
+}
+
+#titlebar:hover {
+  color: #A687BA;
 }
 </style>

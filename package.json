@@ -8,7 +8,8 @@
     "dev": "npm-run-all --parallel watchify serve",
     "build": "cross-env NODE_ENV=production browserify -e src/main.js | uglifyjs -c warnings=false -m > dist/build.js",
     "lint": "eslint --ext .js,.vue src test/unit",
-    "test": "karma start karma.conf.js"
+    "test": "karma start karma.conf.js",
+    "cpf": "bash copy-files.sh"
   },
   "browserify": {
     "transform": [
