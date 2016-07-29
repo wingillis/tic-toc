@@ -88,6 +88,17 @@ export default {
 
       storage.cards = JSON.stringify(this.cards)
     },
+    'insert-card-at': function(index) {
+      this.$broadcast('add-at-index', index)
+    },
+    'new-card-at-index': function(card, index) {
+      this.cards.splice(index, 0, card)
+      this.cards.map((card, index) => {
+        card.position = index
+        this.cards.$set(index, card)
+      })
+      storage.cards = JSON.stringify(this.cards)
+    },
     'start': function(index) {
       this.cards = this.cards.map((card, idx) => {
         card.current = false
@@ -135,6 +146,7 @@ export default {
 .clear-button {
   margin: 0px auto;
   display: flex;
+  padding-bottom: 15px;
 }
 
 #card-holder {

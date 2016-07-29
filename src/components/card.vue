@@ -28,19 +28,18 @@
 
 
 .plus-button {
+  display: flex;
   position: absolute;
   top: -20px;
-  background-color: rgba(226, 159, 183, 0.6);
-  height: 50px;
-  width: 50px;
   left: 145px;
   border-radius: 50px;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .plus-icon {
-  width: 25px;
+  width: 24px;
 }
 
 h3.mdl-card__title-text {
@@ -50,12 +49,27 @@ h3.mdl-card__title-text {
 /*.handle {
   cursor: ns-resize;
 }*/
+
+.fade-transition {
+  transition: all 0.2s ease;
+  background-color: rgba(83, 109, 254, 0.8);
+  height: 50px;
+  width: 50px;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+  top: 5px;
+  left: 170px;
+}
 </style>
 
 <template lang="jade">
-.hider(@mouseenter="showDiv", @mouseleave="hideDiv", :style="hiderStyle")
-  .plus-button(:style="addButtonStyle")
-    i.material-icons.plus-icon add circle
+.hider(@mouseenter="showDiv", @mouseleave="hideDiv", :style="hiderStyle" v-if="index !== 0")
+  .plus-button(:style="addButtonStyle", v-if="showAdd", transition="fade", @click="addTimer").mdl-js-button.mdl-js-ripple-effect.mdl-button--raised
+    i.material-icons.plus-icon add_circle
 .card.mdl-card.mdl-shadow--2dp(v-mdl)
   .mdl-card__title.handle
     h3.mdl-card__title-text {{card.title}}
@@ -122,7 +136,7 @@ export default {
       timerRunning: false,
       timerID: null,
       windowWidth: window.innerWidth,
-      addButtonStyle: addButtonStyle,
+      showAdd: false,
       hiderStyle: hiderStyle
     }
     return data
@@ -134,13 +148,18 @@ export default {
   },
   methods: {
     showDiv() {
-      this.addButtonStyle.display = "flex"
+      this.showAdd = true
     },
     hideDiv() {
-      this.addButtonStyle.display = "none"
+      this.showAdd = false
     },
     notifyDelete() {
       this.$dispatch('delete', this.index)
+    },
+    addTimer () {
+      // move to the new-card vue and add new timer. Add timer between
+      // the two where the button was clicked
+      this.$dispatch('insert-card-at', this.index)
     },
     start () {
       this.card.current = true

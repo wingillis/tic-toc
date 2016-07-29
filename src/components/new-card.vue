@@ -1,6 +1,6 @@
 <style>
 #timer-input {
-  margin: 10px auto;
+  margin: 15px auto;
   min-height: 100px;
   min-width: 340px;
 }
@@ -61,16 +61,27 @@ export default {
         current: false,
         position: 0
       }
-      this.$dispatch('add', card)
+      if (this.index == null) {
+        this.$dispatch('add', card)
+        setTimeout(() => {
+          this.$els.titput.focus()
+        }, 200)
+      } else {
+        this.$dispatch('new-card-at-index', card, this.index)
+        this.index = null
+      }
 
       this.title = ''
       this.time = ''
       // remove the class that causes the label to go above the input
       this.$els.title.className = this.$els.title.className.replace('is-dirty', '')
       this.$els.time.className = this.$els.time.className.replace('is-dirty', '')
-      setTimeout(() => {
-        this.$els.titput.focus()
-      }, 200)
+    }
+  },
+  events: {
+    'add-at-index': function(index) {
+      this.$els.titput.focus()
+      this.index = index
     }
   }
 }
