@@ -7,7 +7,11 @@
         <button id="clbtn" class="clear-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" @click="clearAll">Clear all</button>
       </div>
       <!-- Render all the timers created so far -->
-      <card v-for="(index, card) in cards" :card="card" :index="index" ></card>
+      <div>
+        <div v-for="(index, card) in cards">
+          <card :card="card" :index="index"></card>
+        </div>
+      </div>
     </div>
     <new-card></new-card>
   </div>
@@ -74,8 +78,10 @@ export default {
   events: {
     'delete': function(index) {
       // remove at index, and only remove 1 entry
-      this.cards.splice(index,1)
-      storage.cards = JSON.stringify(this.cards)
+      setTimeout(() => {
+        this.cards.splice(index,1)
+        storage.cards = JSON.stringify(this.cards)
+      }, 1000)
     },
     'add': function(card) {
       if (this.cards === []) {
@@ -172,4 +178,5 @@ export default {
 #titlebar:hover {
   color: #A687BA;
 }
+
 </style>

@@ -7,8 +7,9 @@
 
 .card {
   margin: 0px auto;
-  min-height: 100px;
+  /*min-height: 100px;*/
   min-width: 340px;
+  min-height: 0;
 }
 
 .mdl-card__supporting-text > h4 {
@@ -68,32 +69,39 @@ h3.mdl-card__title-text {
   outline: none;
   margin-right: 40px;
 }
+
+.expand {
+  transition: max-height 0.8s ease, opacity 0.8s ease;
+  opacity: 0;
+  max-height: 0px;
+}
 </style>
 
 <template lang="jade">
-.hider(@mouseenter="showDiv", @mouseleave="hideDiv", :style="hiderStyle" v-if="index !== 0")
-  .plus-button(:style="addButtonStyle", v-if="showAdd", transition="fade", @click="addTimer").mdl-js-button.mdl-js-ripple-effect.mdl-button--raised
-    i.material-icons.plus-icon add_circle
-.card.mdl-card.mdl-shadow--2dp(v-mdl, v-el:this-card)
-  .mdl-card__title.handle
-    input#edit-title.mdl-textfield__input(type="text", v-mdl, v-model="card.title", v-el:titput, v-if="editing", @keyup.enter="stopEdit")
-    h3.mdl-card__title-text(v-else, @dblclick="edit") {{card.title}}
-  .mdl-card__menu
-    button.mdl-button.mdl-js-button.mdl-button--icon(v-mdl, @click="notifyDelete")
-      i.material-icons delete
-  .mdl-card__supporting-text
-    h4 Time left: {{strTime}}
-      button#reset-button.mdl-button.mdl-js-button.mdl-button--icon(v-mdl, v-if="canBeReset()", @click="resetTime")
-        i.material-icons cached
-  .mdl-card__actions.mdl-card--border
-    .action-bar(v-if="card.current")
-      button.mdl-button.mdl-js-button.mdl-js-ripple-effect.mdl-button--accent(v-mdl, @click="handleRunTimer")
-        span(v-if="timerRunning") Pause
-        span(v-else) Resume
-      .mdl-layout-spacer
-      button.mdl-button.mdl-js-button.mdl-js-ripple-effect.mdl-button--raised.mdl-button--colored(v-mdl, @click="cancel") Cancel
-    div(v-else)
-      button.mdl-button.mdl-js-button.mdl-js-ripple-effect.mdl-button--raised.mdl-button--colored(v-mdl, @click="start") Start
+div.expand(v-el:card-vue)
+  .hider(@mouseenter="showDiv", @mouseleave="hideDiv", :style="hiderStyle" v-if="index !== 0")
+    .plus-button(:style="addButtonStyle", v-if="showAdd", transition="fade", @click="addTimer").mdl-js-button.mdl-js-ripple-effect.mdl-button--raised
+      i.material-icons.plus-icon add_circle
+  .card.mdl-card.mdl-shadow--2dp(v-mdl, v-el:this-card)
+    .mdl-card__title.handle
+      input#edit-title.mdl-textfield__input(type="text", v-mdl, v-model="card.title", v-el:titput, v-if="editing", @keyup.enter="stopEdit")
+      h3.mdl-card__title-text(v-else, @dblclick="edit") {{card.title}}
+    .mdl-card__menu
+      button.mdl-button.mdl-js-button.mdl-button--icon(v-mdl, @click="notifyDelete")
+        i.material-icons delete
+    .mdl-card__supporting-text
+      h4 Time left: {{strTime}}
+        button#reset-button.mdl-button.mdl-js-button.mdl-button--icon(v-mdl, v-if="canBeReset()", @click="resetTime")
+          i.material-icons cached
+    .mdl-card__actions.mdl-card--border
+      .action-bar(v-if="card.current")
+        button.mdl-button.mdl-js-button.mdl-js-ripple-effect.mdl-button--accent(v-mdl, @click="handleRunTimer")
+          span(v-if="timerRunning") Pause
+          span(v-else) Resume
+        .mdl-layout-spacer
+        button.mdl-button.mdl-js-button.mdl-js-ripple-effect.mdl-button--raised.mdl-button--colored(v-mdl, @click="cancel") Cancel
+      div(v-else)
+        button.mdl-button.mdl-js-button.mdl-js-ripple-effect.mdl-button--raised.mdl-button--colored(v-mdl, @click="start") Start
 </template>
 
 <script>
@@ -123,7 +131,6 @@ function humanizeTime(t_ms) {
 export default {
   props: ['card', 'index'],
   data () {
-
     // assume data is always in hh:mm:ss: 00:15:00 for 15 minutes
     var t = this.card.time
     var addButtonStyle = {
@@ -144,6 +151,7 @@ export default {
       hiderStyle: hiderStyle,
       editing: false
     }
+
     return data
   },
   ready () {
@@ -151,6 +159,14 @@ export default {
       this.$els.thisCard.scrollIntoView()
     }
     window.addEventListener('resize', this.handleResize)
+    this.$nextTick(() => {
+      this.$els.cardVue.style.maxHeight = '300px'
+      this.$els.cardVue.style.opacity = 1
+    })
+    setTimeout(() => {
+      this.$els.cardVue.style.maxHeight = this.$els.cardVue.clientHeight + 'px'
+    }, 1000)
+
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.handleResize)
@@ -159,6 +175,9 @@ export default {
     stopEdit () {
       this.editing = false
       this.$dispatch('save-changes')
+      this.$nextTick(() => {
+        this.$els.cardVue.style.maxHeight = this.$els.cardVue.clientHeight + 'px'
+      })
     },
     edit () {
       if(!this.timerRunning) {
@@ -166,6 +185,7 @@ export default {
         setTimeout(() => {
           this.$els.titput.focus()
         }, 200)
+        this.$els.cardVue.style.maxHeight = '999px';
       }
     },
     handleResize (e) {
@@ -180,6 +200,8 @@ export default {
       this.showAdd = false
     },
     notifyDelete() {
+      this.$els.cardVue.style.opacity = 0
+      this.$els.cardVue.style.maxHeight = 0
       this.$dispatch('delete', this.index)
     },
     addTimer () {

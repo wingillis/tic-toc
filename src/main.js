@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
-// import Sortable from 'sortablejs'
 
 Vue.directive('mdl', {
   bind() {
     componentHandler.upgradeElement(this.el);
   }
 })
+
+Vue.config.devtools = true
+
+// Vue.use(VueList)
 
 // Vue.directive('sortable', function (val) {
 //   var ctx = this
